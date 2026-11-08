@@ -70,6 +70,7 @@ export default async function CoursePage({ searchParams }: { searchParams: Promi
                         <select id="wl-track" name="track">{Object.entries(TRACKS).map(([k, t]) => <option key={k} value={k}>{t.label}</option>)}</select>
                       </div>
                       <button className="btn btn-gold">Join the waiting list</button>
+                      <p className="small muted" style={{ marginTop: 8 }}>This does not reserve a place or commit you to pay. It only means you hear first when enrollment opens.</p>
                     </form>
                   ) : (
                     <Link className="btn btn-gold" href={user ? "/pending" : "/signup"}>{user ? "Check my status" : "Request to join"}</Link>

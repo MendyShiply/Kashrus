@@ -44,13 +44,15 @@ export default function AboutPage() {
             practical way with people who want it.
           </p>
           <p>
-            Our long term vision: {site.vision.charAt(0).toLowerCase() + site.vision.slice(1)}
+            Our long term vision: {site.vision.charAt(0).toLowerCase() + site.vision.slice(1)} This is a goal we
+            are working toward through education and training, not a claim of affiliation with the Badatz or of any
+            certification authority.
           </p>
           <div className="card">
             <h3>Independent</h3>
             <p className="muted" style={{ margin: 0 }}>
               The Rav brings experience from major agencies, but this community is his own. {site.disclaimer} Nothing on this site is an endorsement or criticism of any specific hechsher; the goal
-              is education.
+              is education. For a personal halachic question, please ask your own rav.
             </p>
           </div>
           <h2>Joining</h2>

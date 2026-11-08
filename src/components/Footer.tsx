@@ -11,6 +11,7 @@ export default function Footer() {
           </div>
           <div>Under the guidance of {site.founder.name}</div>
           <div className="small" style={{ opacity: 0.8 }}>{site.disclaimer}</div>
+          <div className="small" style={{ opacity: 0.8 }}>This community provides education. Please bring personal halachic questions to your rav.</div>
         </div>
         <div className="row">
           <Link href="/about">About</Link>

@@ -41,7 +41,7 @@ export default function MemberTable({ users, full = false, viewerCanApprove = fa
               <td>
                 <div className="row">
                   {u.status !== "APPROVED" && <Btn id={u.id} field="status" value="APPROVED" label="Accept" cls="btn-ok" action={setMemberStatus} />}
-                  {u.status !== "REJECTED" && u.role !== "ADMIN" && <Btn id={u.id} field="status" value="REJECTED" label="Reject" cls="btn-danger" action={setMemberStatus} />}
+                  {u.status !== "REJECTED" && u.role !== "ADMIN" && <Btn id={u.id} field="status" value="REJECTED" label={u.status === "APPROVED" ? "Remove access" : "Reject"} cls="btn-danger" action={setMemberStatus} />}
                   {full && u.status === "APPROVED" && (
                     u.role === "ADMIN"
                       ? <Btn id={u.id} field="role" value="MEMBER" label="Remove admin" cls="btn-outline" action={setMemberRole} />
