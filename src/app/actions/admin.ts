@@ -99,7 +99,7 @@ export async function deleteCategory(form: FormData) {
 }
 
 /* Settings (live + course) */
-const SETTING_KEYS = ["liveTitle", "liveEmbedUrl", "liveJoinUrl", "liveSchedule", "courseTitle", "coursePrice"];
+const SETTING_KEYS = ["liveTitle", "liveJoinUrl", "liveMeetingId", "livePasscode", "liveSchedule", "courseTitle", "coursePrice"];
 export async function saveSettings(form: FormData) {
   await requireAdmin();
   for (const k of SETTING_KEYS) if (form.has(k)) await setSetting(k, str(form, k));

@@ -45,7 +45,6 @@ async function main() {
 
   const defaults = {
     liveTitle: "Live Shiur",
-    liveEmbedUrl: "",
     liveJoinUrl: "",
     liveSchedule: "",
     courseOpen: "false",

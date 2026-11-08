@@ -11,7 +11,7 @@ A private, members only video community for people who care about kashrus, under
 | Videos | Long form videos and vertical shorts. Post by pasting a link (YouTube unlisted, Vimeo, Google Drive, Zoom recording) or by uploading a file with a progress bar. Uploaded videos only play for approved members. |
 | Pages | Home, Categories, each category, Videos, Shorts, Live, Course, About, Contact, plus login and sign up. |
 | Categories | Seeded with the first eight topics: Bug Awareness, Home Checking System, Bakeries, Dairy Restaurants, Meat Restaurants, Supermarket, Catering Kitchens, Off Site Events. Editable in the admin. |
-| Live | Admin pastes a Zoom or Google Meet link (members click "Join now") and/or a YouTube Live link that plays right on the page. Includes instructions for automatic recording and virtual backgrounds. |
+| Live | Zoom only. Admin pastes the Zoom link (plus optional meeting ID and passcode) and members click "Join on Zoom". Includes Zoom instructions for automatic cloud recording, backgrounds and keeping it private. |
 | Contact | Messages are saved and shown in the admin panel. |
 | Course (for later) | Turn on enrollment and set a price when the community is ready. Two tracks: Home Kashrus and Professional Mashgiach. Lessons, progress tracking, Stripe card payments (or mark paid by hand). |
 | Haskamos | Add rabbanim who approve the course, with their haskama text and signature image. They appear on the course page and sign the certificate. |
