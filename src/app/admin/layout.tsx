@@ -18,7 +18,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <Link href="/admin/videos">Videos and shorts</Link>
         <Link href="/admin/videos/new">+ Post a video</Link>
         <Link href="/admin/categories">Categories</Link>
-        <Link href="/admin/live">Live settings</Link>
+        <Link href="/admin/live">Live on Zoom</Link>
+        <Link href="/admin/zoom">Zoom recordings</Link>
+        <Link href="/admin/articles">Articles and write ups</Link>
         <Link href="/admin/messages">Messages {messages > 0 && <span className="tag">{messages}</span>}</Link>
         <Link href="/admin/course">Course</Link>
         <Link href="/admin/rabbis">Rabbis and haskamos</Link>

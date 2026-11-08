@@ -14,7 +14,7 @@ export default async function LiveAdmin() {
         <div className="field">
           <label>Zoom meeting link</label>
           <input name="liveJoinUrl" type="url" placeholder="https://us02web.zoom.us/j/..." defaultValue={s.liveJoinUrl} />
-          <div className="small muted">Only approved members can see this link.</div>
+          <div className="small muted">Only approved members can see this link. When the Zoom Meeting SDK is connected, members watch inside the Live page.</div>
         </div>
         <div className="grid grid-2" style={{ gap: 12 }}>
           <div className="field"><label>Meeting ID (optional)</label><input name="liveMeetingId" type="text" defaultValue={s.liveMeetingId} /></div>
@@ -23,13 +23,16 @@ export default async function LiveAdmin() {
         <button className="btn btn-gold">Save</button>
       </form>
       <div className="card small">
-        <h3>Zoom setup (one time)</h3>
+        <h3>Zoom setup (one time, on zoom.us → Settings)</h3>
         <ul>
-          <li><strong>Record automatically:</strong> Zoom website → Settings → Recording → turn on “Automatic recording” and choose “Record in the cloud”.</li>
-          <li><strong>Background:</strong> Settings → Background &amp; Effects → upload a background image so every session looks the same.</li>
-          <li><strong>Keep it private:</strong> turn on the Waiting Room or a passcode so only members get in.</li>
-          <li><strong>After the shiur:</strong> copy the recording&apos;s share link from Zoom and post it under <a href="/admin/videos/new">Post a video</a>.</li>
+          <li><strong>Record automatically:</strong> Recording → turn on “Cloud recording” and “Automatic recording”, set to the cloud.</li>
+          <li><strong>Word for word transcript:</strong> Recording → Cloud recording → tick “Create audio transcript”. Also turn on “Full transcript” under In Meeting (Advanced) so people can read live captions during the shiur.</li>
+          <li><strong>Summary:</strong> AI Companion → turn on “Meeting summary with AI Companion” and choose to start it automatically.</li>
+          <li><strong>Background:</strong> Background &amp; Effects → upload a background image so every shiur looks the same.</li>
+          <li><strong>Keep it private:</strong> turn on the Waiting Room or a passcode.</li>
+          <li><strong>After the shiur:</strong> go to <a href="/admin/zoom">Zoom recordings</a> and click Import. The video, transcript and summary arrive together as a draft.</li>
         </ul>
+        <p className="muted" style={{ margin: 0 }}>Cloud recording, transcripts and AI summaries need a paid Zoom plan (Pro or higher).</p>
       </div>
     </div>
   );

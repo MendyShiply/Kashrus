@@ -21,6 +21,7 @@ export default async function Header() {
           <Link href="/videos">Videos</Link>
           <Link href="/shorts">Shorts</Link>
           <Link href="/live">Live</Link>
+          <Link href="/articles">Articles</Link>
           <Link href="/course">Course</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>

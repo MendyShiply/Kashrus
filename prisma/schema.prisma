@@ -46,6 +46,9 @@ model Video {
   embedUrl    String?
   filePath    String?
   thumbnail   String?
+  summary     String?
+  transcript  String?
+  zoomMeetingUuid String? @unique
   published   Boolean   @default(true)
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
@@ -112,4 +115,16 @@ model LessonProgress {
   createdAt DateTime @default(now())
 
   @@unique([userId, lessonId])
+}
+
+// Write ups, newsletters and articles (often made from a shiur's transcript)
+model Article {
+  id        String   @id @default(cuid())
+  title     String
+  kind      String   @default("ARTICLE") // ARTICLE | NEWSLETTER | WRITEUP
+  body      String
+  videoId   String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

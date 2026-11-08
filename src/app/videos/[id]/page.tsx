@@ -11,6 +11,7 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const v = await db.video.findUnique({ where: { id }, include: { category: true } });
   if (!v || (!v.published && user.role !== "ADMIN")) notFound();
+  const articles = await db.article.findMany({ where: { videoId: v.id, published: true }, select: { id: true, title: true } });
   const related = await db.video.findMany({
     where: { published: true, id: { not: v.id }, categoryId: v.categoryId ?? undefined, kind: v.kind },
     include: { category: true },
@@ -28,7 +29,30 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
           </div>
           <h1 style={{ fontSize: "1.9rem", marginTop: 10 }}>{v.title}</h1>
           {v.description && <p style={{ whiteSpace: "pre-wrap" }}>{v.description}</p>}
-          {user.role === "ADMIN" && <Link className="btn btn-outline btn-sm" href={`/admin/videos/${v.id}`}>Edit video</Link>}
+          {v.summary && (
+            <div style={{ marginTop: 20 }}>
+              <h2 style={{ fontSize: "1.3rem" }}>Summary</h2>
+              <div className="summary-box">{v.summary}</div>
+            </div>
+          )}
+          {v.transcript && (
+            <details className="transcript" style={{ marginTop: 16 }}>
+              <summary>Full transcript (word for word)</summary>
+              <div className="transcript-body">{v.transcript}</div>
+            </details>
+          )}
+          {articles.length > 0 && (
+            <div style={{ marginTop: 20 }}>
+              <h2 style={{ fontSize: "1.3rem" }}>Write ups from this shiur</h2>
+              <ul>{articles.map((a) => <li key={a.id}><Link href={`/articles/${a.id}`}>{a.title}</Link></li>)}</ul>
+            </div>
+          )}
+          {user.role === "ADMIN" && (
+            <div className="row" style={{ marginTop: 16 }}>
+              <Link className="btn btn-outline btn-sm" href={`/admin/videos/${v.id}`}>Edit video</Link>
+              <Link className="btn btn-outline btn-sm" href={`/admin/articles/new?video=${v.id}`}>Start a write up from this shiur</Link>
+            </div>
+          )}
         </div>
       </div>
       {related.length > 0 && (

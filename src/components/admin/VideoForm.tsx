@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { saveVideo } from "@/app/actions/admin";
+import { vttToText } from "@/lib/transcript";
 
 type Cat = { id: string; title: string };
 type V = {
   id?: string; title?: string; description?: string | null; kind?: string; source?: string; embedUrl?: string | null;
   filePath?: string | null; thumbnail?: string | null; categoryId?: string | null; published?: boolean;
+  summary?: string | null; transcript?: string | null;
 };
 
 /** Uploads a file straight to the server with a progress bar and returns the stored name. */
@@ -62,6 +64,10 @@ function Uploader({ name, accept, initial, label }: { name: string; accept: stri
 
 export default function VideoForm({ video, categories }: { video?: V; categories: Cat[] }) {
   const [source, setSource] = useState(video?.source || "EMBED");
+  const [transcript, setTranscript] = useState(video?.transcript || "");
+  async function loadTranscript(file: File) {
+    setTranscript(vttToText(await file.text()));
+  }
   return (
     <form action={saveVideo} className="card">
       {video?.id && <input type="hidden" name="id" value={video.id} />}
@@ -104,6 +110,16 @@ export default function VideoForm({ video, categories }: { video?: V; categories
       <Uploader name="thumbnail" accept="image/*" initial={video?.thumbnail} label="Cover image (optional)" />
 
       <div className="field"><label htmlFor="description">Description</label><textarea id="description" name="description" defaultValue={video?.description || ""} /></div>
+      <div className="field">
+        <label htmlFor="summary">Summary (optional)</label>
+        <textarea id="summary" name="summary" placeholder="Paste the Zoom AI summary or write a few key points" defaultValue={video?.summary || ""} />
+      </div>
+      <div className="field">
+        <label htmlFor="transcript">Word for word transcript (optional)</label>
+        <input type="file" accept=".vtt,.txt,text/vtt,text/plain" onChange={(e) => e.target.files?.[0] && loadTranscript(e.target.files[0])} />
+        <div className="small muted" style={{ margin: "4px 0 8px" }}>Upload the transcript file Zoom gives you (.vtt or .txt), or paste the text below.</div>
+        <textarea id="transcript" name="transcript" style={{ minHeight: 160 }} value={transcript} onChange={(e) => setTranscript(e.target.value)} />
+      </div>
       <div className="field"><label className="checkbox"><input type="checkbox" name="published" defaultChecked={video?.published ?? true} /> Published (visible to members)</label></div>
       <button className="btn btn-gold">{video?.id ? "Save changes" : "Post video"}</button>
     </form>

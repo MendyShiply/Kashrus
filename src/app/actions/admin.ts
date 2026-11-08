@@ -53,6 +53,8 @@ export async function saveVideo(form: FormData) {
     embedUrl: source === "EMBED" ? opt(form, "embedUrl") : null,
     filePath: source === "UPLOAD" ? opt(form, "filePath") : null,
     thumbnail: opt(form, "thumbnail"),
+    summary: opt(form, "summary"),
+    transcript: opt(form, "transcript"),
     categoryId: opt(form, "categoryId"),
     published: form.get("published") === "on",
   };
@@ -183,4 +185,29 @@ export async function setEnrollmentStatus(form: FormData) {
   if (!["ACTIVE", "PENDING_PAYMENT"].includes(status)) return;
   await db.enrollment.update({ where: { id: str(form, "id") }, data: { status } });
   revalidatePath("/admin/course");
+}
+
+/* Articles, newsletters and write ups */
+export async function saveArticle(form: FormData) {
+  await requireAdmin();
+  const id = str(form, "id");
+  const kind = ["ARTICLE", "NEWSLETTER", "WRITEUP"].includes(str(form, "kind")) ? str(form, "kind") : "ARTICLE";
+  const data = {
+    title: str(form, "title") || "Untitled",
+    kind,
+    body: str(form, "body"),
+    videoId: opt(form, "videoId"),
+    published: form.get("published") === "on",
+  };
+  if (id) await db.article.update({ where: { id }, data });
+  else await db.article.create({ data });
+  revalidatePath("/", "layout");
+  redirect("/admin/articles");
+}
+
+export async function deleteArticle(form: FormData) {
+  await requireAdmin();
+  await db.article.delete({ where: { id: str(form, "id") } });
+  revalidatePath("/", "layout");
+  redirect("/admin/articles");
 }
