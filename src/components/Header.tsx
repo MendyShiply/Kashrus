@@ -16,12 +16,12 @@ export default async function Header() {
         <input type="checkbox" id="menu" className="menu-toggle" aria-label="Open menu" />
         <label htmlFor="menu" className="menu-btn" aria-hidden>☰</label>
         <nav className="nav">
-          <Link href="/">Home</Link>
           <Link href="/categories">Categories</Link>
           <Link href="/videos">Videos</Link>
           <Link href="/shorts">Shorts</Link>
           <Link href="/live">Live</Link>
           <Link href="/articles">Articles</Link>
+          <Link href="/newsletter">Newsletter</Link>
           <Link href="/course">Course</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>

@@ -43,7 +43,7 @@ export async function getCurrentUser() {
     if (!payload.sub) return null;
     return await db.user.findUnique({
       where: { id: payload.sub },
-      select: { id: true, name: true, email: true, status: true, role: true, createdAt: true },
+      select: { id: true, name: true, email: true, status: true, role: true, canApprove: true, createdAt: true },
     });
   } catch {
     return null;

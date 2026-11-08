@@ -14,7 +14,9 @@ A private, members only video community for people who care about kashrus, under
 | Live | Zoom only. With the Zoom Meeting SDK connected, members watch the shiur inside the Live page under their own name; there is always an "Open in Zoom app" button too. Includes Zoom instructions for automatic cloud recording, transcripts, AI summaries, backgrounds and keeping it private. |
 | Zoom recordings | Admin → Zoom recordings lists the last 30 days of cloud recordings. One click imports the video, the word for word transcript and the AI Companion summary as a draft video. |
 | Transcripts and summaries | Every video can have a summary and a full transcript (upload Zoom's .vtt file or paste text). Members see them under the video. |
-| Articles | Shiur write ups, articles and newsletters. "Start a write up from this shiur" opens the editor next to the transcript so you can copy snippets. |
+| Articles and Newsletter | Two menu tabs. Shiur write ups and articles go under Articles; newsletters under Newsletter. |
+| Automatic drafts | When a shiur gets a transcript (Zoom import or upload), Claude drafts a write up from it. Admins can also click to draft an article from any shiur, or a newsletter covering the last week, two weeks or month. Each draft lists points for the Rav to double check. |
+| Rav's approval | Nothing is posted until someone marked "can approve" (the Rav) clicks **Approve and post**. He can also send a draft back with notes. Helpers can only save drafts and send them for approval; if a helper edits a posted piece, it comes down until it is approved again. |
 | Contact | Messages are saved and shown in the admin panel. |
 | Course (for later) | Turn on enrollment and set a price when the community is ready. Two tracks: Home Kashrus and Professional Mashgiach. Lessons, progress tracking, Stripe card payments (or mark paid by hand). |
 | Haskamos | Add rabbanim who approve the course, with their haskama text and signature image. They appear on the course page and sign the certificate. |
@@ -66,6 +68,12 @@ Everything works without these, but they unlock the automatic parts. Create both
    `ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID` and `ZOOM_CLIENT_SECRET`.
 3. In Zoom settings turn on cloud recording, "Create audio transcript", and "Meeting summary with AI Companion".
    These need a paid Zoom plan (Pro or higher).
+
+### Automatic drafting (Claude)
+
+Create an API key at [console.anthropic.com](https://console.anthropic.com) and put it in `ANTHROPIC_API_KEY`. Without it,
+everything still works; you just write the articles yourself. A draft from an hour long shiur typically costs well under
+a dollar. The account created by `npm run setup` is the approver; in Admin → Members he can let other admins approve too.
 
 ### Stripe (when the course launches)
 

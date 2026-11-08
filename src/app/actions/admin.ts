@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { autoDraftForVideo } from "@/lib/drafts";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
@@ -58,14 +60,17 @@ export async function saveVideo(form: FormData) {
     categoryId: opt(form, "categoryId"),
     published: form.get("published") === "on",
   };
+  let videoId = id;
   if (id) {
     const old = await db.video.findUnique({ where: { id } });
     if (old && old.filePath && old.filePath !== data.filePath) await removeFile(old.filePath);
     if (old && old.thumbnail && old.thumbnail !== data.thumbnail) await removeFile(old.thumbnail);
     await db.video.update({ where: { id }, data });
   } else {
-    await db.video.create({ data });
+    videoId = (await db.video.create({ data })).id;
   }
+  // A transcript means a write up can be drafted for the Rav to approve. Runs after the page responds.
+  if (data.transcript) after(() => autoDraftForVideo(videoId));
   revalidatePath("/", "layout");
   redirect("/admin/videos");
 }
@@ -187,22 +192,64 @@ export async function setEnrollmentStatus(form: FormData) {
   revalidatePath("/admin/course");
 }
 
-/* Articles, newsletters and write ups */
-export async function saveArticle(form: FormData) {
-  await requireAdmin();
+/* Articles, newsletters and write ups.
+   Nothing is posted until someone allowed to approve (the Rav) approves it. */
+// One action per button, so the choice never depends on which button the browser reports as the submitter.
+export async function saveArticleDraft(form: FormData) {
+  return saveArticle(form, "save");
+}
+export async function submitArticle(form: FormData) {
+  return saveArticle(form, "submit");
+}
+export async function approveArticle(form: FormData) {
+  return saveArticle(form, "approve");
+}
+
+async function saveArticle(form: FormData, intent: "save" | "submit" | "approve") {
+  const user = await requireAdmin();
   const id = str(form, "id");
   const kind = ["ARTICLE", "NEWSLETTER", "WRITEUP"].includes(str(form, "kind")) ? str(form, "kind") : "ARTICLE";
+  const old = id ? await db.article.findUnique({ where: { id } }) : null;
+
+  let status = old?.status || "DRAFT";
+  if (intent === "submit") status = "PENDING";
+  if (intent === "approve" && user.canApprove) status = "APPROVED";
+  // Someone other than an approver changing an approved piece sends it back for approval.
+  if (intent === "save" && old?.status === "APPROVED" && !user.canApprove) status = "PENDING";
+
   const data = {
     title: str(form, "title") || "Untitled",
     kind,
     body: str(form, "body"),
     videoId: opt(form, "videoId"),
-    published: form.get("published") === "on",
+    status,
+    published: status === "APPROVED",
+    ...(status === "APPROVED" && old?.status !== "APPROVED" ? { approvedBy: user.name, approvedAt: new Date(), returnNotes: null } : {}),
+    ...(status !== "APPROVED" ? { approvedBy: null, approvedAt: null } : {}),
   };
   if (id) await db.article.update({ where: { id }, data });
   else await db.article.create({ data });
   revalidatePath("/", "layout");
-  redirect("/admin/articles");
+  redirect(`/admin/articles${status === "PENDING" ? "?s=PENDING" : status === "APPROVED" ? "?s=APPROVED" : ""}`);
+}
+
+export async function returnArticle(form: FormData) {
+  const user = await requireAdmin();
+  if (!user.canApprove) return;
+  await db.article.update({
+    where: { id: str(form, "id") },
+    data: { status: "DRAFT", published: false, approvedBy: null, approvedAt: null, returnNotes: opt(form, "returnNotes") },
+  });
+  revalidatePath("/", "layout");
+  redirect("/admin/articles?s=DRAFT");
+}
+
+export async function unpublishArticle(form: FormData) {
+  const user = await requireAdmin();
+  if (!user.canApprove) return;
+  await db.article.update({ where: { id: str(form, "id") }, data: { status: "DRAFT", published: false, approvedBy: null, approvedAt: null } });
+  revalidatePath("/", "layout");
+  redirect("/admin/articles?s=DRAFT");
 }
 
 export async function deleteArticle(form: FormData) {
@@ -210,4 +257,11 @@ export async function deleteArticle(form: FormData) {
   await db.article.delete({ where: { id: str(form, "id") } });
   revalidatePath("/", "layout");
   redirect("/admin/articles");
+}
+
+export async function setApprover(form: FormData) {
+  const admin = await requireAdmin();
+  if (!admin.canApprove) return; // only an approver can name other approvers
+  await db.user.update({ where: { id: str(form, "id") }, data: { canApprove: str(form, "value") === "1" } });
+  revalidatePath("/admin/members");
 }

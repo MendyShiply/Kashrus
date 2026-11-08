@@ -35,6 +35,7 @@ async function main() {
           password: await bcrypt.hash(password, 12),
           status: "APPROVED",
           role: "ADMIN",
+          canApprove: true,
         },
       });
       console.log(`Created admin account ${email}`);

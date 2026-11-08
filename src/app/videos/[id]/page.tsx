@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { requireMember } from "@/lib/auth";
 import { VideoCard, VideoPlayer } from "@/components/Video";
+import { draftingEnabled } from "@/lib/drafts";
+import { draftFromVideoAction } from "@/app/actions/drafts";
+import ImportButton from "@/components/admin/ImportButton";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +14,7 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const v = await db.video.findUnique({ where: { id }, include: { category: true } });
   if (!v || (!v.published && user.role !== "ADMIN")) notFound();
-  const articles = await db.article.findMany({ where: { videoId: v.id, published: true }, select: { id: true, title: true } });
+  const articles = await db.article.findMany({ where: { videoId: v.id, status: "APPROVED" }, select: { id: true, title: true } });
   const related = await db.video.findMany({
     where: { published: true, id: { not: v.id }, categoryId: v.categoryId ?? undefined, kind: v.kind },
     include: { category: true },
@@ -50,7 +53,14 @@ export default async function VideoPage({ params }: { params: Promise<{ id: stri
           {user.role === "ADMIN" && (
             <div className="row" style={{ marginTop: 16 }}>
               <Link className="btn btn-outline btn-sm" href={`/admin/videos/${v.id}`}>Edit video</Link>
-              <Link className="btn btn-outline btn-sm" href={`/admin/articles/new?video=${v.id}`}>Start a write up from this shiur</Link>
+              <Link className="btn btn-outline btn-sm" href={`/admin/articles/new?video=${v.id}`}>Write it up myself</Link>
+              {v.transcript && draftingEnabled() && (
+                <form action={draftFromVideoAction}>
+                  <input type="hidden" name="videoId" value={v.id} />
+                  <input type="hidden" name="kind" value="ARTICLE" />
+                  <ImportButton label="Draft an article from this shiur" pendingLabel="Writing, about a minute..." />
+                </form>
+              )}
             </div>
           )}
         </div>

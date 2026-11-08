@@ -5,6 +5,8 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { autoDraftForVideo } from "@/lib/drafts";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 import { resolveUpload, safeName, uploadRoot } from "@/lib/uploads";
@@ -58,6 +60,7 @@ export async function importZoomRecording(form: FormData) {
       published: false,
     },
   });
+  if (transcript) after(() => autoDraftForVideo(video.id));
   revalidatePath("/admin", "layout");
   redirect(`/admin/videos/${video.id}?imported=1`);
 }

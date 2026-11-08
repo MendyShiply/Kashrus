@@ -52,12 +52,12 @@ p { margin: 0 0 1em; }
 .brand-name { font-family: var(--serif); font-size: 1.35rem; font-weight: 700; letter-spacing: 0.01em; }
 .brand-he { font-family: var(--serif); font-size: 0.95rem; color: var(--gold-soft); }
 .nav { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
-.nav a, .nav button.linklike { color: #e9edf5; text-decoration: none; padding: 8px 10px; border-radius: 8px; font-size: 0.95rem; }
+.nav a, .nav button.linklike { color: #e9edf5; text-decoration: none; padding: 8px 9px; border-radius: 8px; font-size: 0.93rem; }
 .nav a:hover, .nav button.linklike:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
 .nav .btn { margin-left: 6px; }
 .menu-toggle { display: none; }
 .menu-btn { display: none; color: #fff; font-size: 1.6rem; cursor: pointer; padding: 6px 10px; }
-@media (max-width: 920px) {
+@media (max-width: 1180px) {
   .menu-btn { display: block; }
   .nav { display: none; position: absolute; top: 71px; left: 0; right: 0; background: var(--navy); flex-direction: column; align-items: stretch; padding: 8px 16px 16px; }
   .menu-toggle:checked ~ .nav { display: flex; }

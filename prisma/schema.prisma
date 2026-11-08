@@ -19,6 +19,7 @@ model User {
   password    String
   status      String       @default("PENDING")
   role        String       @default("MEMBER")
+  canApprove  Boolean      @default(false) // may approve articles and newsletters before they are posted
   createdAt   DateTime     @default(now())
   reviewedAt  DateTime?
   enrollments Enrollment[]
@@ -124,7 +125,14 @@ model Article {
   kind      String   @default("ARTICLE") // ARTICLE | NEWSLETTER | WRITEUP
   body      String
   videoId   String?
-  published Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // DRAFT -> PENDING (waiting for the Rav) -> APPROVED (posted). Returned drafts go back to DRAFT with notes.
+  status      String    @default("DRAFT")
+  published   Boolean   @default(false)
+  aiGenerated Boolean   @default(false)
+  reviewNotes String?   // points the drafting assistant wants the Rav to double check
+  returnNotes String?   // the Rav's notes when sending a draft back
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

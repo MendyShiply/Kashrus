@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import MemberTable from "@/components/admin/MemberTable";
+import { requireAdmin } from "@/lib/auth";
 
 const TABS = ["PENDING", "APPROVED", "REJECTED"] as const;
 
 export default async function MembersAdmin({ searchParams }: { searchParams: Promise<{ s?: string; q?: string }> }) {
+  const me = await requireAdmin();
   const sp = await searchParams;
   const s = TABS.includes(sp.s as (typeof TABS)[number]) ? sp.s! : "PENDING";
   const q = sp.q?.trim();
@@ -30,7 +32,7 @@ export default async function MembersAdmin({ searchParams }: { searchParams: Pro
           <input type="text" name="q" placeholder="Search name, email, city" defaultValue={q} style={{ width: 240 }} />
         </form>
       </div>
-      {users.length === 0 ? <p className="muted">No one here.</p> : <MemberTable users={users} full />}
+      {users.length === 0 ? <p className="muted">No one here.</p> : <MemberTable users={users} full viewerCanApprove={me.canApprove} />}
     </div>
   );
 }

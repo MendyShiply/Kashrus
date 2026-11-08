@@ -1,6 +1,6 @@
-import { deleteMember, setMemberRole, setMemberStatus } from "@/app/actions/admin";
+import { deleteMember, setApprover, setMemberRole, setMemberStatus } from "@/app/actions/admin";
 
-type U = { id: string; name: string; email: string; phone: string | null; city: string | null; reason: string | null; status: string; role: string; createdAt: Date };
+type U = { id: string; name: string; email: string; phone: string | null; city: string | null; reason: string | null; status: string; role: string; canApprove: boolean; createdAt: Date };
 
 function Btn({ id, field, value, label, cls, action }: { id: string; field: string; value: string; label: string; cls: string; action: (f: FormData) => Promise<void> }) {
   return (
@@ -12,7 +12,7 @@ function Btn({ id, field, value, label, cls, action }: { id: string; field: stri
   );
 }
 
-export default function MemberTable({ users, full = false }: { users: U[]; full?: boolean }) {
+export default function MemberTable({ users, full = false, viewerCanApprove = false }: { users: U[]; full?: boolean; viewerCanApprove?: boolean }) {
   return (
     <div className="table-wrap">
       <table>
@@ -35,6 +35,7 @@ export default function MemberTable({ users, full = false }: { users: U[]; full?
               <td>
                 <span className={`tag ${u.status === "APPROVED" ? "tag-ok" : u.status === "REJECTED" ? "tag-bad" : ""}`}>{u.status.toLowerCase()}</span>
                 {u.role === "ADMIN" && <div><span className="tag tag-navy">admin</span></div>}
+                {u.canApprove && <div><span className="tag tag-ok">approves articles</span></div>}
               </td>
               <td>
                 <div className="row">
@@ -44,6 +45,9 @@ export default function MemberTable({ users, full = false }: { users: U[]; full?
                     u.role === "ADMIN"
                       ? <Btn id={u.id} field="role" value="MEMBER" label="Remove admin" cls="btn-outline" action={setMemberRole} />
                       : <Btn id={u.id} field="role" value="ADMIN" label="Make admin" cls="btn-outline" action={setMemberRole} />
+                  )}
+                  {full && viewerCanApprove && u.role === "ADMIN" && (
+                    <Btn id={u.id} field="value" value={u.canApprove ? "0" : "1"} label={u.canApprove ? "Stop approving" : "Can approve articles"} cls="btn-outline" action={setApprover} />
                   )}
                   {full && <Btn id={u.id} field="x" value="" label="Delete" cls="btn-outline" action={deleteMember} />}
                 </div>
