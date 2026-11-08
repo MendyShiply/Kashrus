@@ -21,8 +21,8 @@ export default function AboutPage() {
             the counter in bakeries, restaurants, supermarkets, catering kitchens and events.
           </p>
           <p>
-            For many years he served with the OK, and he has also worked for the OU and for a kashrus agency serving
-            the Syrian community in Flatbush, Brooklyn.
+            For many years he served with the OK, and he has also worked for the OU and for JSOR, the kashrus agency
+            serving the Syrian community in Brooklyn and the Jersey Shore.
           </p>
           <p>
             Out of that experience he developed his own method for checking produce for insects using a special mesh,
