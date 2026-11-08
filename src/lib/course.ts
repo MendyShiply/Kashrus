@@ -12,3 +12,13 @@ export const TRACKS: Record<string, { label: string; certLine: string }> = {
 export function stripeEnabled() {
   return !!process.env.STRIPE_SECRET_KEY;
 }
+
+export const DEFAULT_SYLLABUS = [
+  "Foundations of kashrus supervision",
+  "Checking produce for insects: the mesh cloth method and more",
+  "The home kitchen: systems that last",
+  "Restaurants: dairy, meat and pareve",
+  "Bakeries and catering kitchens",
+  "Events, halls and off site work",
+  "Practical exam and review",
+].join("\n");

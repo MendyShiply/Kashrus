@@ -4,6 +4,9 @@ import MembersOnly from "@/components/MembersOnly";
 import Link from "next/link";
 import ZoomEmbed from "@/components/ZoomEmbed";
 import { zoomEmbedEnabled } from "@/lib/zoom";
+import { formatNextShiur } from "@/lib/live";
+import { db } from "@/lib/db";
+import { site } from "@/lib/site";
 
 export const metadata = { title: "Live" };
 export const dynamic = "force-dynamic";
@@ -15,10 +18,30 @@ export default async function LivePage() {
   const s = await getSettings();
   const join = s.liveJoinUrl;
   const isLive = s.liveIsOn === "true";
+  const next = formatNextShiur(s.liveNextAt);
+  const past = member
+    ? await db.video.findMany({
+        where: { published: true, OR: [{ zoomMeetingUuid: { not: null } }, { transcript: { not: null } }] },
+        orderBy: { createdAt: "desc" },
+        take: 8,
+        select: { id: true, title: true, createdAt: true, transcript: true, summary: true },
+      })
+    : [];
   return (
     <div className="container section" style={{ maxWidth: 860 }}>
       <span className="eyebrow">{isLive ? <><span className="live-dot" />Live now on Zoom</> : "Live shiurim on Zoom"}</span>
       <h1>{s.liveTitle || "Live Shiur"}</h1>
+      {next && (
+        <div className="card spread" style={{ margin: "8px 0 16px" }}>
+          <div>
+            <span className="eyebrow">Next live shiur</span>
+            <h3 style={{ margin: 0 }}>{next}</h3>
+            {s.liveNextTopic && <div>{s.liveNextTopic}</div>}
+            <div className="small muted">With {site.founder.name}</div>
+          </div>
+          {member && <a className="btn btn-outline btn-sm" href="/live/calendar.ics">Add to calendar</a>}
+        </div>
+      )}
       {s.liveSchedule && <p className="muted" style={{ whiteSpace: "pre-wrap" }}>{s.liveSchedule}</p>}
       {!member ? (
         <MembersOnly loggedIn={!!user} />
@@ -53,9 +76,27 @@ export default async function LivePage() {
           ) : (
             <div className="alert alert-info">There is no live session right now. The next one will be announced here.</div>
           )}
-          <p className="small muted">
-            Every session is recorded, with a full transcript and summary. Missed one? Find it in <Link href="/videos">Videos</Link>.
-          </p>
+          <h2 style={{ marginTop: 24 }}>Past sessions</h2>
+          <p className="small muted">Every session is recorded and posted with its word for word transcript and a summary.</p>
+          {past.length === 0 ? (
+            <p className="muted">Recordings will appear here after the first live shiur.</p>
+          ) : (
+            <div className="stack">
+              {past.map((v) => (
+                <Link key={v.id} href={`/videos/${v.id}`} className="card spread">
+                  <div>
+                    <strong>{v.title}</strong>
+                    <div className="small muted">Recorded {v.createdAt.toLocaleDateString("en-US", { dateStyle: "long" })}</div>
+                  </div>
+                  <div className="row small">
+                    <span className="tag tag-navy">Recording</span>
+                    {v.transcript && <span className="tag tag-navy">Transcript</span>}
+                    {v.summary && <span className="tag tag-navy">Summary</span>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { getSettings } from "@/lib/settings";
-import { TRACKS, stripeEnabled } from "@/lib/course";
+import { DEFAULT_SYLLABUS, TRACKS, stripeEnabled } from "@/lib/course";
 import { deleteLesson, saveLesson, saveSettings, setEnrollmentStatus } from "@/app/actions/admin";
 
 export default async function CourseAdmin() {
+  const waiting = await db.courseInterest.findMany({ orderBy: { createdAt: "asc" } });
+  const waitingUsers = await db.user.findMany({ where: { id: { in: waiting.map((w) => w.userId) } }, select: { id: true, name: true, email: true } });
   const [s, lessons, videos, enrollments, members] = await Promise.all([
     getSettings(),
     db.lesson.findMany({ orderBy: { order: "asc" } }),
@@ -50,6 +52,10 @@ export default async function CourseAdmin() {
           <div className="field"><label>Price in USD (0 = free)</label><input name="coursePrice" type="number" step="0.01" min="0" defaultValue={s.coursePrice} /></div>
         </div>
         <div className="field">
+          <label>“What you will learn” list (one per line, shown until lessons are added)</label>
+          <textarea name="courseSyllabus" style={{ minHeight: 140 }} defaultValue={s.courseSyllabus || DEFAULT_SYLLABUS} />
+        </div>
+        <div className="field">
           <label>The Rav&apos;s signature for certificates (photo of the signature on white paper, PNG or JPG)</label>
           <input name="founderSignature" type="file" accept="image/*" />
           {s.founderSignature && <img src={`/media/${s.founderSignature}`} alt="Signature" style={{ maxHeight: 60, marginTop: 8 }} />}
@@ -59,6 +65,20 @@ export default async function CourseAdmin() {
         </p>
         <button className="btn btn-gold btn-sm">Save settings</button>
       </form>
+
+      <h2>Waiting list ({waiting.length})</h2>
+      {waiting.length === 0 ? <p className="muted">No one yet.</p> : (
+        <div className="card small">
+          {waiting.map((w) => {
+            const u = waitingUsers.find((x) => x.id === w.userId);
+            return u ? <div key={w.id}>{u.name} · {u.email} · {TRACKS[w.track]?.label}</div> : null;
+          })}
+          <div className="field" style={{ marginTop: 12 }}>
+            <label htmlFor="wl-emails">All emails (copy into your email program)</label>
+            <textarea id="wl-emails" readOnly style={{ minHeight: 60 }} defaultValue={waitingUsers.map((u) => u.email).join(", ")} />
+          </div>
+        </div>
+      )}
 
       <h2>Lessons</h2>
       {lessons.map((l) => (

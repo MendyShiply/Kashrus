@@ -11,6 +11,7 @@ export default function NewsletterPage() {
       title="Newsletter"
       intro="A regular roundup of the shiurim, common questions and practical tips. Approved by the Rav."
       empty="The first newsletter is on its way."
+      signup
     />
   );
 }

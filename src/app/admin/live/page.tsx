@@ -10,6 +10,11 @@ export default async function LiveAdmin() {
         <input type="hidden" name="liveIsOn__present" value="1" />
         <div className="field"><label className="checkbox"><input type="checkbox" name="liveIsOn" defaultChecked={s.liveIsOn === "true"} /> Show “Live now” on the live page</label></div>
         <div className="field"><label>Session title</label><input name="liveTitle" type="text" defaultValue={s.liveTitle} /></div>
+        <div className="grid grid-3" style={{ gap: 12 }}>
+          <div className="field"><label>Next shiur (Eastern time)</label><input name="liveNextAt" type="datetime-local" defaultValue={s.liveNextAt} /></div>
+          <div className="field"><label>Length in minutes</label><input name="liveNextMinutes" type="number" min="15" step="15" defaultValue={s.liveNextMinutes || "60"} /></div>
+          <div className="field"><label>Topic of the next shiur</label><input name="liveNextTopic" type="text" placeholder="Bug Awareness, Part 2: leafy greens" defaultValue={s.liveNextTopic} /></div>
+        </div>
         <div className="field"><label>Schedule / announcement</label><textarea name="liveSchedule" style={{ minHeight: 70 }} placeholder="Every Sunday at 8:30pm Eastern" defaultValue={s.liveSchedule} /></div>
         <div className="field">
           <label>Zoom meeting link</label>

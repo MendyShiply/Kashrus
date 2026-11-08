@@ -3,14 +3,14 @@ import { db } from "@/lib/db";
 import { getCurrentUser, isMember } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
-import { TRACKS } from "@/lib/course";
-import { enroll } from "@/app/actions/course";
+import { DEFAULT_SYLLABUS, TRACKS } from "@/lib/course";
+import { enroll, joinWaitingList } from "@/app/actions/course";
 
 export const metadata = { title: "Mashgiach Course" };
 export const dynamic = "force-dynamic";
 
-export default async function CoursePage({ searchParams }: { searchParams: Promise<{ pending?: string }> }) {
-  const { pending } = await searchParams;
+export default async function CoursePage({ searchParams }: { searchParams: Promise<{ pending?: string; waiting?: string }> }) {
+  const { pending, waiting } = await searchParams;
   const [user, s, rabbis, lessons] = await Promise.all([
     getCurrentUser(),
     getSettings(),
@@ -21,6 +21,8 @@ export default async function CoursePage({ searchParams }: { searchParams: Promi
   const open = s.courseOpen === "true";
   const price = parseFloat(s.coursePrice || "0");
   const enrollment = user ? await db.enrollment.findFirst({ where: { userId: user.id } }) : null;
+  const onList = user ? await db.courseInterest.findUnique({ where: { userId: user.id } }) : null;
+  const syllabus = (s.courseSyllabus || DEFAULT_SYLLABUS).split("\n").map((l) => l.trim()).filter(Boolean);
 
   return (
     <>
@@ -44,12 +46,8 @@ export default async function CoursePage({ searchParams }: { searchParams: Promi
               {Object.entries(TRACKS).map(([k, t]) => (
                 <div className="card" key={k}><h3>{t.label}</h3></div>
               ))}
-              {lessons.length > 0 && (
-                <>
-                  <h2 style={{ marginTop: 28 }}>Course outline</h2>
-                  <ol>{lessons.map((l) => <li key={l.id}>{l.title}</li>)}</ol>
-                </>
-              )}
+              <h2 style={{ marginTop: 28 }}>What you will learn</h2>
+              <ol>{(lessons.length > 0 ? lessons.map((l) => l.title) : syllabus).map((t, i) => <li key={i}>{t}</li>)}</ol>
             </div>
 
             <div className="card">
@@ -62,8 +60,20 @@ export default async function CoursePage({ searchParams }: { searchParams: Promi
               ) : !open ? (
                 <>
                   <h3>Enrollment opens soon</h3>
-                  <p className="muted">The course will open once the community has grown. Members will be the first to know.</p>
-                  <Link className="btn btn-outline" href="/contact">Register interest</Link>
+                  <p className="muted">Paid enrollment. The course opens once the community has grown, and members on the waiting list hear first.</p>
+                  {waiting || onList ? (
+                    <div className="alert alert-ok">You are on the waiting list. We will let you know when enrollment opens.</div>
+                  ) : member ? (
+                    <form action={joinWaitingList}>
+                      <div className="field">
+                        <label htmlFor="wl-track">Which track interests you?</label>
+                        <select id="wl-track" name="track">{Object.entries(TRACKS).map(([k, t]) => <option key={k} value={k}>{t.label}</option>)}</select>
+                      </div>
+                      <button className="btn btn-gold">Join the waiting list</button>
+                    </form>
+                  ) : (
+                    <Link className="btn btn-gold" href={user ? "/pending" : "/signup"}>{user ? "Check my status" : "Request to join"}</Link>
+                  )}
                 </>
               ) : !member ? (
                 <>

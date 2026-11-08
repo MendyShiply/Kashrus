@@ -16,6 +16,8 @@ model User {
   phone       String?
   city        String?
   reason      String?
+  referredBy  String?
+  newsletter  Boolean      @default(true) // wants an email when a newsletter or article is posted
   password    String
   status      String       @default("PENDING")
   role        String       @default("MEMBER")
@@ -135,4 +137,12 @@ model Article {
   approvedAt  DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+// Members who asked to be told when the course opens
+model CourseInterest {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  track     String   @default("HOME")
+  createdAt DateTime @default(now())
 }

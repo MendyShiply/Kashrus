@@ -13,8 +13,9 @@ export function SignupForm() {
       <div className="field"><label htmlFor="email">Email</label><input id="email" name="email" type="email" required autoComplete="email" /></div>
       <div className="field"><label htmlFor="phone">Phone (optional)</label><input id="phone" name="phone" type="tel" autoComplete="tel" /></div>
       <div className="field"><label htmlFor="city">City and community</label><input id="city" name="city" type="text" placeholder="e.g. Lakewood, NJ" /></div>
+      <div className="field"><label htmlFor="referredBy">Who referred you? (optional)</label><input id="referredBy" name="referredBy" type="text" /></div>
       <div className="field">
-        <label htmlFor="reason">Why would you like to join? Who referred you?</label>
+        <label htmlFor="reason">Why would you like to join?</label>
         <textarea id="reason" name="reason" placeholder="A few words help us review your request" />
       </div>
       <div className="field"><label htmlFor="password">Choose a password</label><input id="password" name="password" type="password" minLength={8} required autoComplete="new-password" /></div>

@@ -1,6 +1,6 @@
 import { deleteMember, setApprover, setMemberRole, setMemberStatus } from "@/app/actions/admin";
 
-type U = { id: string; name: string; email: string; phone: string | null; city: string | null; reason: string | null; status: string; role: string; canApprove: boolean; createdAt: Date };
+type U = { id: string; name: string; email: string; phone: string | null; city: string | null; reason: string | null; referredBy: string | null; status: string; role: string; canApprove: boolean; createdAt: Date };
 
 function Btn({ id, field, value, label, cls, action }: { id: string; field: string; value: string; label: string; cls: string; action: (f: FormData) => Promise<void> }) {
   return (
@@ -30,6 +30,7 @@ export default function MemberTable({ users, full = false, viewerCanApprove = fa
               </td>
               <td className="small">
                 {u.city && <div><strong>{u.city}</strong></div>}
+                {u.referredBy && <div>Referred by <strong>{u.referredBy}</strong></div>}
                 <div style={{ whiteSpace: "pre-wrap", maxWidth: 320 }}>{u.reason || <span className="muted">No note</span>}</div>
               </td>
               <td>

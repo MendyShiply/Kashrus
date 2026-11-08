@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { getCurrentUser, isMember } from "@/lib/auth";
 import { site } from "@/lib/site";
 import { VideoCard } from "@/components/Video";
+import { getSettings } from "@/lib/settings";
+import { formatNextShiur } from "@/lib/live";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +12,8 @@ export default async function Home() {
   const user = await getCurrentUser();
   const member = isMember(user);
   const categories = await db.category.findMany({ orderBy: { order: "asc" } });
+  const settings = await getSettings();
+  const nextShiur = formatNextShiur(settings.liveNextAt);
   const [latest, shorts] = member
     ? await Promise.all([
         db.video.findMany({ where: { published: true, kind: "LONG" }, include: { category: true }, orderBy: { createdAt: "desc" }, take: 6 }),
@@ -38,7 +42,7 @@ export default async function Home() {
             ) : (
               <>
                 <Link className="btn btn-gold" href="/signup">Request to join</Link>
-                <Link className="btn btn-light" href="/about">Learn more</Link>
+                <Link className="btn btn-light" href={user ? "/pending" : "/login"}>{user ? "My status" : "Member login"}</Link>
               </>
             )}
           </div>
@@ -99,6 +103,17 @@ export default async function Home() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="section hero" style={{ padding: "48px 0" }}>
+        <div className="container center">
+          <span className="eyebrow">Live on Zoom</span>
+          <h2 style={{ color: "#fff" }}>{nextShiur ? `Next live shiur: ${nextShiur}` : "Live shiurim with the Rav"}</h2>
+          <p style={{ color: "var(--gold-soft)" }}>
+            {settings.liveNextTopic || "Join the class live and ask questions, or watch the recording, transcript and summary afterward."}
+          </p>
+          <Link className="btn btn-gold" href="/live">See the live page</Link>
         </div>
       </section>
 

@@ -83,3 +83,12 @@ export async function completeLesson(form: FormData) {
   });
   redirect(next ? `/course/learn/${next.id}` : "/course/learn");
 }
+
+/** Adds a member to the course waiting list (before enrollment opens). */
+export async function joinWaitingList(form: FormData) {
+  const user = await requireMember();
+  const track = TRACKS[String(form.get("track"))] ? String(form.get("track")) : "HOME";
+  await db.courseInterest.upsert({ where: { userId: user.id }, update: { track }, create: { userId: user.id, track } });
+  revalidatePath("/course");
+  redirect("/course?waiting=1");
+}

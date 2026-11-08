@@ -14,6 +14,7 @@ const signupSchema = z.object({
   phone: z.string().trim().max(40).optional(),
   city: z.string().trim().max(100).optional(),
   reason: z.string().trim().max(2000).optional(),
+  referredBy: z.string().trim().max(200).optional(),
   password: z.string().min(8, "Password must be at least 8 characters").max(200),
 });
 

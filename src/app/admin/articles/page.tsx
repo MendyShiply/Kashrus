@@ -17,6 +17,7 @@ export default async function ArticlesAdmin({ searchParams }: { searchParams: Pr
     db.article.groupBy({ by: ["status"], _count: true }),
     db.video.findMany({ where: { transcript: { not: null } }, orderBy: { createdAt: "desc" }, select: { id: true, title: true } }),
   ]);
+  const subscribers = await db.user.findMany({ where: { newsletter: true, OR: [{ status: "APPROVED" }, { role: "ADMIN" }] }, select: { email: true } });
   const count = (k: string) => counts.find((c) => c.status === k)?._count ?? 0;
   const ai = draftingEnabled();
 
@@ -54,6 +55,12 @@ export default async function ArticlesAdmin({ searchParams }: { searchParams: Pr
       ) : (
         <p className="small muted">Automatic drafting is off. Add an ANTHROPIC_API_KEY to turn it on (see the README).</p>
       )}
+
+      <details className="card small">
+        <summary><strong>Newsletter email list ({subscribers.length})</strong></summary>
+        <p className="muted" style={{ marginTop: 8 }}>Members who want the newsletter by email. Copy these into your email program (put them in BCC) when you send an approved issue.</p>
+        <textarea readOnly style={{ minHeight: 70 }} defaultValue={subscribers.map((u) => u.email).join(", ")} />
+      </details>
 
       <div className="row">
         {TABS.map((t) => (

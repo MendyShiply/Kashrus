@@ -25,6 +25,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ co
         <PrintButton />
       </div>
       <div className="certificate">
+        <div className="c-bsd">בס״ד</div>
         <div>
           <div className="c-he">{site.hebrewName}</div>
           <div style={{ fontSize: "clamp(0.8rem,1.6vw,1.1rem)", letterSpacing: "0.2em", textTransform: "uppercase" }}>{site.name}</div>
@@ -39,7 +40,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ co
           <div className="sig">
             <div className="sig-mark">{founderSig ? <img src={`/media/${founderSig}`} alt="" /> : site.founder.name}</div>
             <div className="sig-line">
-              {site.founder.name}<br /><span className="he">{site.founder.hebrewName}</span>
+              {site.founder.name}<br /><span className="he">{site.founder.hebrewName}</span><br />Course Director
             </div>
           </div>
           {rabbis.map((r) => (
