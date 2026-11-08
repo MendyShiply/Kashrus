@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// status: PENDING | APPROVED | REJECTED
+// role: MEMBER | ADMIN
+model User {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  phone       String?
+  city        String?
+  reason      String?
+  password    String
+  status      String       @default("PENDING")
+  role        String       @default("MEMBER")
+  createdAt   DateTime     @default(now())
+  reviewedAt  DateTime?
+  enrollments Enrollment[]
+  progress    LessonProgress[]
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  title       String
+  hebrew      String?
+  description String?
+  order       Int     @default(0)
+  videos      Video[]
+}
+
+// kind: LONG | SHORT
+// source: UPLOAD | EMBED
+model Video {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  kind        String    @default("LONG")
+  source      String    @default("EMBED")
+  embedUrl    String?
+  filePath    String?
+  thumbnail   String?
+  published   Boolean   @default(true)
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Key/value site settings (live stream links, course price, etc.)
+model Setting {
+  key   String @id
+  value String
+}
+
+model Rabbi {
+  id            String  @id @default(cuid())
+  name          String
+  hebrewName    String?
+  title         String?
+  community     String?
+  letter        String?
+  signaturePath String?
+  onCertificate Boolean @default(true)
+  order         Int     @default(0)
+}
+
+model Lesson {
+  id          String           @id @default(cuid())
+  title       String
+  description String?
+  order       Int              @default(0)
+  videoId     String?
+  embedUrl    String?
+  progress    LessonProgress[]
+}
+
+// status: PENDING_PAYMENT | ACTIVE | COMPLETED
+model Enrollment {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status          String    @default("PENDING_PAYMENT")
+  stripeSessionId String?
+  createdAt       DateTime  @default(now())
+  completedAt     DateTime?
+  certificateCode String?   @unique
+  track           String    @default("HOME")
+}
+
+model LessonProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+}
