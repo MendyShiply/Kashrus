@@ -5,6 +5,7 @@ import { getSettings } from "@/lib/settings";
 import { site } from "@/lib/site";
 import { DEFAULT_SYLLABUS, TRACKS } from "@/lib/course";
 import { enroll, joinWaitingList } from "@/app/actions/course";
+import { COURSE_IMAGE } from "@/lib/images";
 
 export const metadata = { title: "Mashgiach Course" };
 export const dynamic = "force-dynamic";
@@ -26,7 +27,7 @@ export default async function CoursePage({ searchParams }: { searchParams: Promi
 
   return (
     <>
-      <section className="hero" style={{ padding: "64px 0" }}>
+      <section className="hero photo" style={{ padding: "64px 0", ["--photo" as string]: `url(${COURSE_IMAGE})` }}>
         <div className="container">
           <span className="eyebrow">{open ? "Now enrolling" : "Coming soon"}</span>
           <h1>{s.courseTitle || "Mashgiach Training Course"}</h1>

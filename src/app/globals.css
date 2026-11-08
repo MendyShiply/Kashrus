@@ -202,3 +202,10 @@ details.transcript summary { cursor: pointer; font-weight: 600; color: var(--nav
 .transcript-body { white-space: pre-wrap; max-height: 520px; overflow-y: auto; font-size: 0.93rem; margin-top: 12px; line-height: 1.7; }
 .summary-box { background: #f6f1e3; border-left: 4px solid var(--gold); border-radius: 8px; padding: 16px 20px; white-space: pre-wrap; }
 .article-body { font-size: 1.08rem; line-height: 1.8; white-space: pre-wrap; }
+
+/* Photos */
+.hero.photo { background: linear-gradient(100deg, rgba(19,35,63,0.94) 0%, rgba(19,35,63,0.82) 45%, rgba(19,35,63,0.45) 100%), var(--photo) center / cover no-repeat; }
+.cat-card { padding: 0; overflow: hidden; }
+.cat-card .cat-img { aspect-ratio: 16 / 7; background: var(--navy) center / cover no-repeat; }
+.cat-card .cat-body { padding: 18px 22px 22px; }
+.photo-credit { font-size: 0.75rem; opacity: 0.6; }

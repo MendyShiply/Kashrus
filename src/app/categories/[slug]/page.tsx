@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { getCurrentUser, isMember } from "@/lib/auth";
 import { VideoCard } from "@/components/Video";
 import MembersOnly from "@/components/MembersOnly";
+import { categoryImage } from "@/lib/images";
 
 export const dynamic = "force-dynamic";
 
@@ -18,13 +19,19 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const long = videos.filter((v) => v.kind === "LONG");
   const shorts = videos.filter((v) => v.kind === "SHORT");
 
+  const img = categoryImage(category.slug);
   return (
+    <>
+    <section className={`hero${img ? " photo" : ""}`} style={{ padding: "56px 0", ...(img ? { ["--photo" as string]: `url(${img})` } : {}) }}>
+      <div className="container">
+        <span className="eyebrow">Category</span>
+        <h1>{category.title}</h1>
+        {category.hebrew && <div className="he-title he" style={{ textAlign: "left" }}>{category.hebrew}</div>}
+        <p className="lead">{category.description}</p>
+      </div>
+    </section>
     <div className="container section">
-      <span className="eyebrow">Category</span>
-      <h1>{category.title}</h1>
-      {category.hebrew && <div className="he muted" style={{ fontSize: "1.3rem", textAlign: "left" }}>{category.hebrew}</div>}
-      <p className="muted" style={{ maxWidth: 720 }}>{category.description}</p>
-      <div style={{ marginTop: 28 }}>
+      <div>
         {!member ? (
           <MembersOnly loggedIn={!!user} />
         ) : videos.length === 0 ? (
@@ -42,5 +49,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         )}
       </div>
     </div>
+    </>
   );
 }

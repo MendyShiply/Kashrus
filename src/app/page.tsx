@@ -5,6 +5,7 @@ import { site } from "@/lib/site";
 import { VideoCard } from "@/components/Video";
 import { getSettings } from "@/lib/settings";
 import { formatNextShiur } from "@/lib/live";
+import { HERO_IMAGE, categoryImage } from "@/lib/images";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,7 @@ export default async function Home() {
 
   return (
     <>
-      <section className="hero">
+      <section className="hero photo" style={{ ["--photo" as string]: `url(${HERO_IMAGE})` }}>
         <div className="container">
           <span className="eyebrow">A private kashrus community</span>
           <div className="he-title">{site.hebrewName}</div>
@@ -93,15 +94,21 @@ export default async function Home() {
           <span className="eyebrow">Topics</span>
           <h2>What we are learning</h2>
           <div className="grid grid-2" style={{ marginTop: 20 }}>
-            {categories.map((c, i) => (
-              <Link key={c.id} href={`/categories/${c.slug}`} className="card row" style={{ alignItems: "flex-start", flexWrap: "nowrap" }}>
-                <div className="cat-num">{String(i + 1).padStart(2, "0")}</div>
-                <div>
-                  <h3>{c.title}</h3>
-                  <p className="muted small" style={{ margin: 0 }}>{c.description}</p>
-                </div>
-              </Link>
-            ))}
+            {categories.map((c, i) => {
+              const img = categoryImage(c.slug);
+              return (
+                <Link key={c.id} href={`/categories/${c.slug}`} className="card cat-card">
+                  {img && <div className="cat-img" style={{ backgroundImage: `url(${img})` }} />}
+                  <div className="cat-body row" style={{ alignItems: "flex-start", flexWrap: "nowrap" }}>
+                    <div className="cat-num">{String(i + 1).padStart(2, "0")}</div>
+                    <div>
+                      <h3>{c.title}</h3>
+                      <p className="muted small" style={{ margin: 0 }}>{c.description}</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

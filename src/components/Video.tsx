@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { toEmbedUrl, youTubeThumb } from "@/lib/embed";
+import { categoryImage } from "@/lib/images";
 
 type V = {
   id: string;
@@ -10,13 +11,16 @@ type V = {
   embedUrl?: string | null;
   filePath?: string | null;
   thumbnail?: string | null;
-  category?: { title: string } | null;
+  category?: { title: string; slug?: string } | null;
 };
 
 export function thumbFor(v: V) {
   if (v.thumbnail) return `/media/${v.thumbnail}`;
-  if (v.source === "EMBED") return youTubeThumb(v.embedUrl);
-  return null;
+  if (v.source === "EMBED") {
+    const yt = youTubeThumb(v.embedUrl);
+    if (yt) return yt;
+  }
+  return categoryImage(v.category?.slug);
 }
 
 export function VideoCard({ v }: { v: V }) {

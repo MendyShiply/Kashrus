@@ -18,6 +18,7 @@ export default function Footer() {
           <Link href="/contact">Contact</Link>
           <Link href="/course">Course</Link>
           <span>© {new Date().getFullYear()}</span>
+          <span className="photo-credit">Photos: Unsplash</span>
         </div>
       </div>
     </footer>
