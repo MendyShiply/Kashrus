@@ -25,12 +25,16 @@ export default function AboutPage() {
             serving the Syrian community in Brooklyn and the Jersey Shore.
           </p>
           <p>
+            He supervised the first kosher restaurant at a ski resort in the United States, at the Canyons in Park
+            City, Utah, and in 2022 he was appointed Director of Kashrus of CHK, the Vaad Hakashrus of Crown Heights.
+          </p>
+          <p>
             While at the OK, he developed the mesh cloth method of checking produce for insects, a practical system
             that makes careful bug checking simpler and more reliable and is now widely used in kashrus.
           </p>
           <p>
-            He is the son in law of the late Rabbi David Steigman ז״ל, who served as a senior rabbi at the OK for many
-            years and passed away while on the job in Italy. That legacy of dedication to kashrus is part of what
+            He is the son in law of the late Rabbi Dovid Steigman ז״ל, Senior Rabbinic Coordinator at the OK for
+            decades, who passed away while on the job in Italy. That legacy of dedication to kashrus is part of what
             drives this community.
           </p>
           <h2>Why {site.name}</h2>
