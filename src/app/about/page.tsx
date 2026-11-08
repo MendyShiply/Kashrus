@@ -15,12 +15,23 @@ export default function AboutPage() {
       </section>
       <section className="section">
         <div className="container narrow stack">
-          {/* Edit this text to tell the Rav's story. */}
           <h2>About the Rav</h2>
           <p>
-            {site.founder.name} has spent years in the field of kashrus, seeing first hand what happens behind the
-            counter in bakeries, restaurants, supermarkets, catering kitchens and events. [Add the Rav's background
-            here: where he learned, his experience as a mashgiach, and the communities he has served.]
+            {site.founder.name} has spent many years in the field of kashrus, seeing first hand what happens behind
+            the counter in bakeries, restaurants, supermarkets, catering kitchens and events.
+          </p>
+          <p>
+            For many years he served with the OK, and he has also worked for the OU and for a kashrus agency serving
+            the Syrian community in Flatbush, Brooklyn.
+          </p>
+          <p>
+            Out of that experience he developed his own method for checking produce for insects using a special mesh,
+            a practical system that makes careful bug checking simpler and more reliable.
+          </p>
+          <p>
+            He is the son in law of the late Rabbi David Steigman ז״ל, who served as a senior rabbi at the OK for many
+            years and passed away while on the job in Italy. That legacy of dedication to kashrus is part of what
+            drives this community.
           </p>
           <h2>Why {site.name}</h2>
           <p>
@@ -34,7 +45,7 @@ export default function AboutPage() {
           <div className="card">
             <h3>Independent</h3>
             <p className="muted" style={{ margin: 0 }}>
-              {site.disclaimer} Nothing on this site is an endorsement or criticism of any specific hechsher; the goal
+              The Rav brings experience from major agencies, but this community is his own. {site.disclaimer} Nothing on this site is an endorsement or criticism of any specific hechsher; the goal
               is education.
             </p>
           </div>

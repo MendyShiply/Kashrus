@@ -28,6 +28,7 @@ export default async function Home() {
             Clear, practical shiurim and videos from {site.founder.name} for people who care about kashrus and want to
             understand it better: in the home, at the store, and wherever we eat.
           </p>
+          <p className="lead" style={{ fontSize: "1rem" }}>Drawing on many years of experience with the OK and the OU.</p>
           <div className="row" style={{ marginTop: 24 }}>
             {member ? (
               <>
