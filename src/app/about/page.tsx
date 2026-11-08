@@ -29,8 +29,8 @@ export default function AboutPage() {
             City, Utah, and he served as Director of Kashrus of CHK, the Vaad Hakashrus of Crown Heights.
           </p>
           <p>
-            While at the OK, he developed the mesh cloth method of checking produce for insects, a practical system
-            that makes careful bug checking simpler and more reliable and is now widely used in kashrus.
+            While at the OK, he created the mesh cloth method of checking produce for insects. It has since been
+            adopted and refined across the kashrus world and is now one of the most widely used checking methods.
           </p>
           <p>
             He is the son in law of the late Rabbi Dovid Steigman ז״ל, Senior Rabbinic Coordinator at the OK for
