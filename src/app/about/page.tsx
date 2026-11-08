@@ -25,8 +25,8 @@ export default function AboutPage() {
             serving the Syrian community in Brooklyn and the Jersey Shore.
           </p>
           <p>
-            Out of that experience he developed his own method for checking produce for insects using a special mesh,
-            a practical system that makes careful bug checking simpler and more reliable.
+            While at the OK, he developed the mesh cloth method of checking produce for insects, a practical system
+            that makes careful bug checking simpler and more reliable and is now widely used in kashrus.
           </p>
           <p>
             He is the son in law of the late Rabbi David Steigman ז״ל, who served as a senior rabbi at the OK for many
