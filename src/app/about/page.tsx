@@ -26,7 +26,7 @@ export default function AboutPage() {
           </p>
           <p>
             He supervised the first kosher restaurant at a ski resort in the United States, at the Canyons in Park
-            City, Utah, and in 2022 he was appointed Director of Kashrus of CHK, the Vaad Hakashrus of Crown Heights.
+            City, Utah, and he served as Director of Kashrus of CHK, the Vaad Hakashrus of Crown Heights.
           </p>
           <p>
             While at the OK, he developed the mesh cloth method of checking produce for insects, a practical system
